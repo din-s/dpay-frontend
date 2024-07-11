@@ -2,7 +2,6 @@ import { UpperCasePipe, NgClass} from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WalletService } from '../../services/wallet.service';
-import { Transaction } from '../../models/transaction';
 import { LocalstoreService } from '../../services/localstore.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -17,7 +16,7 @@ export class ExecuteTxnComponent implements OnInit {
 
   constructor(private walletService: WalletService, private localStore: LocalstoreService, private toastService: ToastrService) {}
   public isDebitTxn: boolean = true;
-  public amt: number | null = null;
+  public amt!: number | null;
   public desc: string = '';
   public walletId: string = '';
   public errorMessage: string = '';
@@ -36,7 +35,9 @@ export class ExecuteTxnComponent implements OnInit {
       this.toastService.clear(inProgressToast.toastId);
       this.toastService.success('Transaction executed Successfully', 'TRANSACTION SUCCESS')
       this.errorMessage = ""
-      this.localStore.setItem('balance', {balance: response.balance, asOn: new Date()})
+      this.amt = null;
+      this.desc = "";
+      this.walletService.updateWalletBalance(Number(response.balance))
     }, (error) => {
       this.toastService.clear(inProgressToast.toastId);
       console.log("txn error", error)

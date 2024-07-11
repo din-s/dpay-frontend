@@ -2,19 +2,38 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Wallet } from '../models/wallet';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, throwError } from 'rxjs';
 import { Transaction } from '../models/transaction';
+import { BalanceUpdate } from '../models/balance-update';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WalletService {
   public rowsPerPage: number = 10;
-  private baseUrl = environment.dpayBackend
+  private baseUrl = environment.dpayBackend;
+  private walletIdSubject = new BehaviorSubject<string>('');
+
+  private walletBalanceSubject = new BehaviorSubject<BalanceUpdate>({walletId: this.walletId$.getValue(), balance: 0, asOnDate: new Date()})
   constructor(private http: HttpClient) { }
 
+  public get walletId$(): BehaviorSubject<string> {
+    return this.walletIdSubject;
+  }
+
+  public updateWalletId(walletId: string) {
+    this.walletIdSubject.next(walletId);
+  }
+
+  public get walletBalance$(): BehaviorSubject<BalanceUpdate> {
+    return this.walletBalanceSubject;
+  }
+
+  public updateWalletBalance(balance: number, walletId: string = this.walletId$.getValue()) {
+    this.walletBalanceSubject.next({walletId: walletId, balance: balance, asOnDate: new Date()})
+  }
+
   public setupWallet(walletName: string, initBalance: number = 0): Observable<Wallet> {
-    const wallet: Wallet = {id: "abc123", name: 'sample', balance: 34, date: new Date};
     const uri: string = `${this.baseUrl}/setup`;
     const body: {[key: string]: string | number} = {
       name: walletName,
@@ -44,7 +63,7 @@ export class WalletService {
     )
   }
 
-  public getWalletDetails(id: string): Observable<Wallet> {
+  public getWalletDetails(id: string = this.walletId$.getValue()): Observable<Wallet> {
     const uri = `${this.baseUrl}/wallet/${id}`
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -52,16 +71,13 @@ export class WalletService {
     return this.http.get<Wallet>(uri, httpOptions);
   }
 
-  public getTransaction(id: string, page: number = 0, limit: number = this.rowsPerPage): Observable<any> {
+  public getTransaction(id: string, page: number = 0, limit: number = 1000): Observable<any> {
     const uri = `${this.baseUrl}/transactions?walletId=${id}&skip=${this.rowsPerPage * page}&limit=${limit}`;
 
     const params = new HttpParams();
     params.set('walletId', id);
     params.set('skip', this.rowsPerPage * page);
     params.set('limit', limit);
-
-    console.log('params', params)
-
     return this.http.get<any>(uri)
   }
 
@@ -72,7 +88,7 @@ export class WalletService {
       errorMessage = 'An error occurred: ' + error.erorr.message;
     } else {
       // The backend returned an unsuccessful response code.
-      errorMessage = `Backend returned code ${error.status}: ${error.message}`;
+      errorMessage = `${error?.error?.error || 'An unexpected error occured, please contact Admin.'}`;
     }
     return throwError(errorMessage);
   }

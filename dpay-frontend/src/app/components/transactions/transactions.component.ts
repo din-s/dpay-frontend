@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { WalletService } from '../../services/wallet.service';
 import { LocalstoreService } from '../../services/localstore.service';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridApi } from 'ag-grid-community';
+import { ColDef, Grid, GridApi, GridReadyEvent} from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
 @Component({
   selector: 'app-transactions',
   standalone: true,
@@ -29,25 +28,14 @@ export class TransactionsComponent implements OnInit {
   };
   public themeClass: string = "ag-theme-quartz-dark";
 
-  /**
-   * 
-   *{
-        id,
-        walletId: string,
-        amount: number,
-        balance: number,
-        description: string,
-        date: <JS Date obj>,
-        type: ‘CREDIT’/’DE BIT’
-    }
-   * 
-   */
-
   public colDef: ColDef[] = [
     {
       headerName: 'Date',
       field: 'date',
       valueFormatter: (p) => this.datePipe.transform(p.value || '', 'dd/MM/yyyy hh:mm a') || "",
+      comparator: (valueA, valueB) => {
+        return new Date(valueA).valueOf() - new Date(valueB).valueOf();
+      },
       flex: 1,
     },
     {
@@ -62,7 +50,7 @@ export class TransactionsComponent implements OnInit {
       flex: 1,
     },
     {
-      headerName: 'Type (Cr/Dr)',
+      headerName: 'Type',
       field: 'type',
       flex: 1,
       filter: true
@@ -75,8 +63,18 @@ export class TransactionsComponent implements OnInit {
     },
   ];
 
+  private gridApi!: GridApi;
+
   public getRowClass(param: any) {
     return param && param.data.type == 'CREDIT' ? 'credit-row' : 'debit-row'
+  }
+
+  public onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+  }
+
+  public exportToCSV() {
+    this.gridApi.exportDataAsCsv({allColumns: true})
   }
 
   constructor(

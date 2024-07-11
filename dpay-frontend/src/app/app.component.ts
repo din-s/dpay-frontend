@@ -1,8 +1,7 @@
-import { Component, OnInit, SimpleChange } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LocalstoreService } from './services/localstore.service';
 import { CommonModule } from '@angular/common';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { Wallet } from './models/wallet';
 import { ExecuteTxnComponent } from "./components/execute-txn/execute-txn.component";
 import { WalletService } from './services/wallet.service';
@@ -18,23 +17,28 @@ import { SetupComponent } from "./components/setup/setup.component";
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit{
-  title = 'Dpay, PayAnyTiMe Anywhere';
-  setupRequired: boolean = true;
-  wallet: Wallet| null = null;
-  public asOn: string = "";
-  constructor(private localStoreService: LocalstoreService, private walletService: WalletService, private toastService: ToastrService, private router: Router) {
-
+  title = 'D-pay, PayAnyTiMe Anywhere';
+  public wallet!: Wallet;
+  public asOn!: Date;
+  public walletBalance: number = 0;
+  constructor(
+    private localStoreService: LocalstoreService, 
+    private walletService: WalletService,
+    private toastService: ToastrService, 
+    private router: Router) {
   }
 
   ngOnInit(): void {
+    this.walletService.walletBalance$.subscribe((update) => {
+      this.walletBalance = update.balance;
+      this.asOn = update.asOnDate;
+    })
     this.wallet = this.localStoreService.getWallet();
     if(this.wallet) {
-      this.setupRequired = false;
       // fetch latest wallet details
       this.walletService.getWalletDetails(this.wallet.id).subscribe((details) => {
         this.wallet = details;
-        this.localStoreService.setItem('balance', {balance: this.wallet.balance, asOn: new Date()})
-        this.asOn = new Date().toString();
+        this.walletService.updateWalletBalance(details.balance)
         this.router.navigateByUrl('/execute');
       }, (error) => {
         this.toastService.error('Unable to fetch latest details of wallet from the server', 'UNABLE TO FETCH LATEST WALLET');
@@ -43,11 +47,7 @@ export class AppComponent implements OnInit{
     }
   }
 
-  public isActive(url: string) {
-    return this.router.isActive(url, true)
-  }
-
-  public setSetupRequired(): void {
-    this.setupRequired = false;
+  public handleWalletCreation(walletInfo: any): void {
+    this.wallet = walletInfo;
   }
 }

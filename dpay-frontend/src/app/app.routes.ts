@@ -5,11 +5,6 @@ import { ExecuteTxnComponent } from './components/execute-txn/execute-txn.compon
 
 export const routes: Routes = [
   {
-    path: 'setup',
-    component: SetupComponent,
-    title: 'Dpay | Wallet Setup',
-  },
-  {
     path: 'transactions',
     component: TransactionsComponent,
     title: 'Dpay | Transactions'

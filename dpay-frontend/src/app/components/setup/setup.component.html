@@ -1,5 +1,13 @@
-<div>
-    <input type="text" class="form-control" name="wallet-name" [(ngModel)] = "walletName"/>
-    <input type="number" class="form-control" name="init- balance" [(ngModel)] = "initBalance"/>
-    <button type="submit" (click)="setupWallet()">Create</button>
+<div class="wallet-details d-flex w-100 mx-auto flex-column border p-2 justify-content-between">
+    <div class="mb-2">
+        <label for="wallet-name" class="form-label">Username</label>
+        <input type="text" class="form-control w-80 mx-auto" id="wallet-name" [(ngModel)]="walletName">
+    </div>
+    <div class="mb-2">
+        <label for="init-balance" class="form-label">Opening Balance</label>
+        <input type="number" class="form-control w-80 mx-auto" id="init-balance" [(ngModel)]="initBalance">
+    </div>
+    <div>
+        <button type="submit" (click)="setupWallet()" class="btn btn-primary">Create</button>
+    </div>
 </div>

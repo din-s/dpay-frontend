@@ -1,5 +1,8 @@
+<div class="d-flex justify-content-end me-2">
+    <button class="btn btn-secondary" (click)="exportToCSV()">Export CSV</button>
+</div>
 <ag-grid-angular
-    style="width: 100%; height: 500px;"
+    style="width: 90%; height: 500px; margin: 20px auto;"
     [columnDefs]="colDef"
     [rowData]="rowData"
     [pagination]="pagination"
@@ -8,4 +11,5 @@
     [defaultColDef]="defaultColDef"
     [class]="themeClass"
     [getRowClass]="getRowClass"
+    (gridReady)="onGridReady($event)"
 ></ag-grid-angular>

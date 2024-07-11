@@ -1,18 +1,18 @@
 <div class="transaction-details d-flex w-50 mx-auto flex-column border p-2 justify-content-between">
-    <!-- <div class="d-flex flex-row w-100 mb-3 justify-content-around"> -->
-    <div class="mb-2">
-      <label for="txn-amount" class="form-label">Amount: </label>
-      <input type="number" class="form-control w-80 mx-auto" id="txn-amount" [(ngModel)]="amt">
-    </div>
-    <div class="mb-2">
-      <label for="txn-desc" class="form-label">Description</label>
-      <input type="text" class="form-control w-80 mx-auto" id="txn-desc" [(ngModel)]="desc">
-    </div>
-    <div class="txn-toggle align-self-center mb-2">
-        <label for="txn-switch" class="me-2">Debit</label>
-        <input type="checkbox" id="txn-switch" [checked]="!isDebitTxn" (change)="toggleTxn($event)">
-        <span class="slider"></span>
-        <label for="txn-switch" class="ms-2">Credit</label>
-    </div>
-    <div><button (click)="executeTransaction()" class="btn btn-primary w-100 mt-3 mx-auto">{{'Execute' | uppercase}}</button></div>
+  <div class="mb-2">
+    <label for="txn-amount" class="form-label">Amount: </label>
+    <input type="number" class="form-control w-80 mx-auto" id="txn-amount" [(ngModel)]="amt">
   </div>
+  <div class="mb-2">
+    <label for="txn-desc" class="form-label">Description</label>
+    <input type="text" class="form-control w-80 mx-auto" id="txn-desc" [(ngModel)]="desc">
+  </div>
+  <div class="txn-toggle align-self-center mb-2">
+    <label for="txn-switch" class="me-2">Debit</label>
+    <input type="checkbox" id="txn-switch" [checked]="!isDebitTxn" (change)="toggleTxn($event)">
+    <span class="slider"></span>
+    <label for="txn-switch" class="ms-2">Credit</label>
+  </div>
+  <div><button (click)="executeTransaction()" class="btn btn-primary w-100 mt-3 mx-auto">{{'Execute' |
+      uppercase}}</button></div>
+</div>

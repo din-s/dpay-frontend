@@ -1,1 +1,11 @@
-<p>transactions works!</p>
+<ag-grid-angular
+    style="width: 100%; height: 500px;"
+    [columnDefs]="colDef"
+    [rowData]="rowData"
+    [pagination]="pagination"
+    [paginationPageSize]="paginationPageSize"
+    [paginationPageSizeSelector]="paginationPageSizeSelector"
+    [defaultColDef]="defaultColDef"
+    [class]="themeClass"
+    [getRowClass]="getRowClass"
+></ag-grid-angular>

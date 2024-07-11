@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
@@ -20,5 +21,6 @@ export const appConfig: ApplicationConfig = {
       progressAnimation: 'decreasing',
       easing: 'ease-in'
     }), // Toastr providers
+    DatePipe
   ]
 };

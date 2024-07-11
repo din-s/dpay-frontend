@@ -9,10 +9,10 @@
         pointer-events: none;
 
         &+.slider{
-            background-color: #a93b3b;
+            background-color: #a05050;
         }
         &:checked+.slider {
-            background-color: #4CAF50;
+            background-color: #508050;
         }
     }
 }

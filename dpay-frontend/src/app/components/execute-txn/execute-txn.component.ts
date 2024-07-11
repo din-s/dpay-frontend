@@ -1,7 +1,10 @@
 import { UpperCasePipe, NgClass} from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WalletService } from '../../services/wallet.service';
+import { Transaction } from '../../models/transaction';
+import { LocalstoreService } from '../../services/localstore.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-execute-txn',
@@ -10,13 +13,36 @@ import { WalletService } from '../../services/wallet.service';
   templateUrl: './execute-txn.component.html',
   styleUrl: './execute-txn.component.scss'
 })
-export class ExecuteTxnComponent {
+export class ExecuteTxnComponent implements OnInit {
 
-  constructor(private walletService: WalletService) {}
+  constructor(private walletService: WalletService, private localStore: LocalstoreService, private toastService: ToastrService) {}
   public isDebitTxn: boolean = true;
   public amt: number | null = null;
+  public desc: string = '';
+  public walletId: string = '';
+  public errorMessage: string = '';
+  ngOnInit(): void {
+    this.walletId = this.localStore.getWalletId();
+  }
   public executeTransaction(): void {
-    console.log('this will execute transaction');
+    const txn = {
+      amount: this.amt || 0,
+      description: this.desc,
+      walletId: this.walletId,
+      type: this.isDebitTxn ? 'debit' : 'credit'
+    }
+    const inProgressToast = this.toastService.info('executing...', 'INPROGRESS')
+    this.walletService.executeTransaction(txn).subscribe((response) => {
+      this.toastService.clear(inProgressToast.toastId);
+      this.toastService.success('Transaction executed Successfully', 'TRANSACTION SUCCESS')
+      this.errorMessage = ""
+      this.localStore.setItem('balance', {balance: response.balance, asOn: new Date()})
+    }, (error) => {
+      this.toastService.clear(inProgressToast.toastId);
+      console.log("txn error", error)
+      this.toastService.error(error, 'LAST TRANSACTION FAILED');
+      this.errorMessage = error.message;
+    })
   }
 
   public toggleTxn(event: any):void {

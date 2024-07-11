@@ -1,18 +1,29 @@
 <div class="container-fluid justify-center">
-  <h1>{{title}}</h1>
-  <div *ngIf="!setupRequired; else setupMessage">
+  <h1 class="text-center mb-4"><i class="fa fa-solid fa-wallet"></i>{{title}}</h1>
+  <div *ngIf="wallet; else setup">
     <div class="d-flex w-100 justify-center space-between">
       <div class="flex-item w-40">Welcome back, <strong>{{wallet?.name}}</strong></div>
-      <div class="flex-item w-40 mx-auto">Current Balance: <span class="badge bg-success"> ₹{{wallet?.balance || 0}}</span></div>
+      <div class="flex-item w-40 mx-auto">Balance: <span class="badge bg-success"> ₹{{wallet?.balance || 0}}</span><span
+          class="text-small"><small><em>(As on: {{asOn | date:'dd/MM/yyyy h:mm a'}} )</em></small></span></div>
+      <div>
+        <ul class="list-unstyled">
+          <li>
+            <a [routerLink]="'/transactions'" class="text-decoration-none" [ngClass]="{'active' : isActive('transactions')}">VIEW TRANSACTIONS</a>
+          </li>
+          <li>
+            <a [routerLink]="'/execute'" class="text-decoration-none" [ngClass]="{'active' : isActive('execute')}">EXECUTE TRANSACTIONS</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <hr/>
-    <section class="execute-transaction">
-      <app-execute-txn></app-execute-txn>
-    </section>
+    <hr />
   </div>
-  <ng-template #setupMessage>
-    <h2>Seems like wallet is not setup!</h2>
-    <strong>Go Ahead and <a routerlink href="/setup" (click)="setSetupRequired()">SETUP ONE NOW</a></strong>
+  <ng-template #setup>
+    <div class="transaction-details d-flex w-50 mx-auto flex-column border p-2 justify-content-between">
+      <h2>Seems like wallet is not setup!</h2>
+      <strong>Let's setup one Now</strong>
+      <app-setup></app-setup>
+    </div>
   </ng-template>
 </div>
 <router-outlet />

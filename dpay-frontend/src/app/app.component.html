@@ -1,0 +1,18 @@
+<div class="container-fluid justify-center">
+  <h1>{{title}}</h1>
+  <div *ngIf="!setupRequired; else setupMessage">
+    <div class="d-flex w-100 justify-center space-between">
+      <div class="flex-item w-40">Welcome back, <strong>{{wallet?.name}}</strong></div>
+      <div class="flex-item w-40 mx-auto">Current Balance: <span class="badge bg-success"> ₹{{wallet?.balance || 0}}</span></div>
+    </div>
+    <hr/>
+    <section class="execute-transaction">
+      <app-execute-txn></app-execute-txn>
+    </section>
+  </div>
+  <ng-template #setupMessage>
+    <h2>Seems like wallet is not setup!</h2>
+    <strong>Go Ahead and <a routerlink href="/setup" (click)="setSetupRequired()">SETUP ONE NOW</a></strong>
+  </ng-template>
+</div>
+<router-outlet />

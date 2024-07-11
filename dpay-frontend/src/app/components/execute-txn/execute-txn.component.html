@@ -1,0 +1,13 @@
+<div class="transaction-details d-flex w-50 mx-auto flex-column border p-2">
+    <div class="mb-3">
+      <label for="txn-amount" class="form-label">Enter Amount: </label>
+      <input type="number" class="form-control w-80 mx-auto" id="txn-amount" [(ngModel)]="amt">
+    </div>
+    <div class="txn-toggle">
+        <label for="txn-switch">Debit</label>
+        <input type="checkbox" id="txn-switch" [checked]="isDebitTxn" (change)="toggleTxn($event)">
+        <span class="slider"></span>
+        <label for="txn-switch">Credit</label>
+    </div>
+    <div><button (click)="executeTransaction()" class="btn btn-primary w-75 mt-3 mx-auto">{{'Execute' | uppercase}}</button></div>
+  </div>

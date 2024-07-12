@@ -47,6 +47,9 @@ export class TransactionsComponent implements OnInit {
       headerName: 'Amount',
       field: 'amount',
       valueFormatter: (p) => `₹ ${p.value || 0}`,
+      comparator: (valueA, valueB) => {
+        return Number(valueA) - Number(valueB);
+      },
       flex: 1,
     },
     {

@@ -27,7 +27,7 @@ This document provides information about... How to use the application on your l
 - Two-Way Data Binding: Components leverage two-way data binding for seamless interaction between the user interface and application logic.
 - Pagination: The transaction list includes pagination functionality for easy navigation through a large number of entries.
 - Table Sorting: Transactions can be sorted based on date and amount for better organization.
-
+- CSV Export: Export all of the transactions.
 
 **Project Setup Steps:**
 Clone the Repository:

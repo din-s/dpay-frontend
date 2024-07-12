@@ -2,7 +2,7 @@
   <h1 class="text-center mb-4"><i class="fa fa-solid fa-wallet"></i>{{title}}</h1>
   <div *ngIf="wallet; else setup">
     <div class="d-flex w-100 justify-center space-between">
-      <div class="flex-item w-40">Welcome back, <strong>{{wallet?.name || ''}}</strong></div>
+      <div class="flex-item w-40">Welcome back, <strong>{{wallet.name || ''}}</strong></div>
       <div class="flex-item w-40 mx-auto">Balance: <span class="badge bg-success"> ₹{{walletBalance || 0}}</span><span
           class="text-small"><small><em>(As on: {{asOn | date:'dd/MM/yyyy h:mm a'}} )</em></small></span></div>
       <div>

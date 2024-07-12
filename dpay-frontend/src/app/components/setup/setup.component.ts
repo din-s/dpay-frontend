@@ -32,10 +32,11 @@ export class SetupComponent implements OnInit{
       // mount this wallet information to the localStorage
       this.lsStore.setItem('wallet', this.wallet);
       this.created.emit(this.wallet)
+      this.walletService.updateWalletBalance(this.wallet.balance)
       this.router.navigateByUrl('/execute');
     }, (error) => {
       this.toastService.clear(inProgressToast.toastId);
-      this.toastService.error(error.message, 'WALLET SETUP FAILED');
+      this.toastService.error(error, 'WALLET SETUP FAILED');
       this.errorMessage = error.message;
       this.wallet = null;
     })

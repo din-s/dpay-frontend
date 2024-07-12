@@ -63,6 +63,7 @@ export class TransactionsComponent implements OnInit {
       field: 'balance',
       valueFormatter: (p) => `₹ ${p.value || 0}`,
       flex: 1,
+      sortable: false
     },
   ];
 
